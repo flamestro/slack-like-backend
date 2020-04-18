@@ -24,11 +24,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/channels")
 public class ChannelController {
 
-    private static int staticPage         = 0;
-    private static int staticSizeChannels = 20;
-
-
-
     @Autowired
     ChannelRepository channelRepository;
 
