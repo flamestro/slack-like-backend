@@ -6,9 +6,9 @@ import de.tub.ise.anwsys.dto.MessageDTO;
 import de.tub.ise.anwsys.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,11 +32,11 @@ public class MessageController {
     }
 
     @GetMapping(value = "/{id}/messages")
-    PagedResources<Message> getMessages(PagedResourcesAssembler assembler, @PathVariable("id") int channelId) {
+    public Object getMessages(PagedResourcesAssembler<Message> assembler, @PathVariable("id") int channelId) {
         try {
             return assembler.toResource(messageService.getMessages(channelId));
         } catch (ChannelNotFoundException e) {
-            return null;
+            return new ResponseEntity<>("No such Channel", HttpStatus.BAD_REQUEST);
         }
     }
 }

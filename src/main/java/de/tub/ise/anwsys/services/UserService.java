@@ -20,7 +20,6 @@ public class UserService {
     }
 
     public ArrayList<String> getChannelUsers(int channelId) {
-
         ArrayList<Message> messages = new ArrayList<>();
         ArrayList<String> users = new ArrayList<>();
         if (channelRepository.findById(channelId).isPresent()) {

@@ -7,6 +7,7 @@ import de.tub.ise.anwsys.dto.ChannelDTO;
 import de.tub.ise.anwsys.repositories.ChannelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ChannelService {
@@ -25,6 +26,7 @@ public class ChannelService {
         }
     }
 
+    @Transactional
     public Channel postChannel(ChannelDTO rawChannel) throws ChannelAlreadyExistsException {
         if (!(channelRepository.findAll().stream().filter(channel -> channel.getName().equals(rawChannel.getName())).count() >= 1)) {
             Channel channel = mapChannelData(rawChannel);

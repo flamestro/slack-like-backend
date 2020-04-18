@@ -15,6 +15,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,13 +36,13 @@ public class ChannelController {
     }
 
     @GetMapping(produces = "application/json")
-    PagedResources<Channel> get(@PageableDefault Pageable p, PagedResourcesAssembler assembler) {
+    public PagedResources<Channel> getChannels(@PageableDefault Pageable p, PagedResourcesAssembler assembler) {
         Page<Channel> channels = channelRepository.findAll(p);
         return assembler.toResource(channels);
     }
 
     @GetMapping(value = "/{id}")
-    private ResponseEntity<?> getChannel(@PathVariable("id") int channelId) {
+    public ResponseEntity<?> getChannel(@PathVariable("id") int channelId) {
         try {
             Channel channel = channelService.getChannel(channelId);
             return (new ResponseEntity<>(channel, HttpStatus.OK));
@@ -51,7 +52,7 @@ public class ChannelController {
     }
 
     @PostMapping(consumes = "application/json")
-    private ResponseEntity<?> postChannel(@RequestBody ChannelDTO rawChannel) {
+    public ResponseEntity<?> postChannel(@RequestBody ChannelDTO rawChannel) {
         try {
             Channel channel = channelService.postChannel(rawChannel);
             return (new ResponseEntity<>(channel, HttpStatus.OK));
