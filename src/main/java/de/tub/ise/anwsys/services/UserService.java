@@ -32,8 +32,7 @@ public class UserService {
             users.add(m.getCreator());
         }
         Set<String> usersSet = new HashSet<>(users);
-        users = new ArrayList<>();
-        users.addAll(usersSet);
+        users = new ArrayList<>(usersSet);
 
         return users;
     }

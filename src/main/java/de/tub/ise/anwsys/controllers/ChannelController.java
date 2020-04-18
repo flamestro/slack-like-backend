@@ -1,9 +1,9 @@
 package de.tub.ise.anwsys.controllers;
 
 import de.tub.ise.anwsys.errors.ChannelAlreadyExistsException;
-import de.tub.ise.anwsys.errors.ChannelNotFoundExeption;
+import de.tub.ise.anwsys.errors.ChannelNotFoundException;
 import de.tub.ise.anwsys.model.Channel;
-import de.tub.ise.anwsys.model.ChannelJSON;
+import de.tub.ise.anwsys.dto.ChannelDTO;
 import de.tub.ise.anwsys.repositories.ChannelRepository;
 import de.tub.ise.anwsys.services.ChannelService;
 import de.tub.ise.anwsys.services.UserService;
@@ -41,34 +41,28 @@ public class ChannelController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getChannel(@PathVariable("id") int id) {
-        ResponseEntity<?> result;
+    private ResponseEntity<?> getChannel(@PathVariable("id") int channelId) {
         try {
-            Channel channel = channelService.getChannel(id);
-            result = (new ResponseEntity<>(channel, HttpStatus.OK));
-        } catch (ChannelNotFoundExeption e) {
-            result = (new ResponseEntity<>("", HttpStatus.OK));
+            Channel channel = channelService.getChannel(channelId);
+            return (new ResponseEntity<>(channel, HttpStatus.OK));
+        } catch (ChannelNotFoundException e) {
+            return (new ResponseEntity<>("No such Channel", HttpStatus.OK));
         }
-        return result;
     }
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<?> postChannel(@RequestBody ChannelJSON c) {
-        ResponseEntity<?> result;
-
+    private ResponseEntity<?> postChannel(@RequestBody ChannelDTO rawChannel) {
         try {
-            Channel channel = channelService.postChannel(c);
-            result = (new ResponseEntity<>(channel, HttpStatus.OK));
+            Channel channel = channelService.postChannel(rawChannel);
+            return (new ResponseEntity<>(channel, HttpStatus.OK));
         } catch (ChannelAlreadyExistsException e) {
-            result = (new ResponseEntity<>("Channel is already existing", HttpStatus.CONFLICT));
+            return (new ResponseEntity<>("Channel is already existing", HttpStatus.CONFLICT));
         }
-
-        return result;
     }
 
     @GetMapping(value = "/{id}/users", consumes = "application/json")
-    public ResponseEntity<?> getUsers(@PathVariable("id") int id) {
-        return new ResponseEntity<>(userService.getChannelUsers(id), HttpStatus.OK);
+    private ResponseEntity<?> getChannelUsers(@PathVariable("id") int channelId) {
+        return new ResponseEntity<>(userService.getChannelUsers(channelId), HttpStatus.OK);
     }
 }
 

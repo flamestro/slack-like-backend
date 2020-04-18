@@ -1,7 +1,8 @@
 package de.tub.ise.anwsys.controllers;
 
+import de.tub.ise.anwsys.errors.ChannelNotFoundException;
 import de.tub.ise.anwsys.model.Message;
-import de.tub.ise.anwsys.model.MessageJSON;
+import de.tub.ise.anwsys.dto.MessageDTO;
 import de.tub.ise.anwsys.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -22,12 +23,20 @@ public class MessageController {
     }
 
     @PostMapping(value = "/{id}/messages", consumes = "application/json")
-    public ResponseEntity<?> postMessage(@PathVariable("id") int id, @RequestBody MessageJSON m) {
-        return new ResponseEntity<>(messageService.postMessage(id, m), HttpStatus.OK);
+    public ResponseEntity<?> postMessage(@PathVariable("id") int channelId, @RequestBody MessageDTO rawMessage) {
+        try {
+            return new ResponseEntity<>(messageService.postMessage(channelId, rawMessage), HttpStatus.OK);
+        } catch (ChannelNotFoundException e) {
+            return new ResponseEntity<>("No such Channel", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(value = "/{id}/messages")
-    PagedResources<Message> get(PagedResourcesAssembler assembler, @PathVariable("id") int id) {
-        return assembler.toResource(messageService.getMessages(id));
+    PagedResources<Message> getMessages(PagedResourcesAssembler assembler, @PathVariable("id") int channelId) {
+        try {
+            return assembler.toResource(messageService.getMessages(channelId));
+        } catch (ChannelNotFoundException e) {
+            return null;
+        }
     }
 }

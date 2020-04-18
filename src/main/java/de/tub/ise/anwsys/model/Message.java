@@ -23,5 +23,4 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "channel_id")
     private Channel channel;
-
 }
