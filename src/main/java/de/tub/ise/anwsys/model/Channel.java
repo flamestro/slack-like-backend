@@ -1,62 +1,27 @@
 package de.tub.ise.anwsys.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name="Channel")
+@Table(name = "Channel")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Channel implements Serializable {
-
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="Channel_Id")
-    private int    id           ;
-    private String topic = null ;
-    private String name  = null ;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Channel_Id")
+    private int id;
     @JsonIgnore
     @OneToMany(mappedBy = "channel")
-    private List<Message> messageList = null ;
-
-    public String getName() {
-        return name ;
-    }
-
-    public Channel (){
-
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void addMessage(Message message){
-        this.messageList.add(message);
-    }
-
-    public List<Message> getMessageList() {
-        return messageList;
-    }
-
-    public void setMessageList(List<Message> messageList) {
-        this.messageList = messageList;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
+    private List<Message> messageList;
+    private String topic;
+    private String name;
 }

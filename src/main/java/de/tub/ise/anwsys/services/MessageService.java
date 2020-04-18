@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -25,25 +24,24 @@ public class MessageService {
     public MessageService(MessageRepository messageRepository, ChannelRepository channelRepository) {
         this.messageRepository = messageRepository;
         this.channelRepository = channelRepository;
-
     }
-    public Message postMessage(int id, MessageJSON m) {
-        Channel actualChannel = channelRepository.findById(id).get();
+
+    public Message postMessage(int channelId, MessageJSON m) {
+        Channel actualChannel = channelRepository.findById(channelId).get();
         Message msg = mapMessageData(m, actualChannel);
         messageRepository.save(msg);
-        actualChannel.addMessage(msg);
+        addMessage(channelId, msg);
         channelRepository.save(actualChannel);
 
         return msg;
     }
 
-    public Page<Message> getMessages(PagedResourcesAssembler assembler, int id) {
+    public Page<Message> getMessages(int id) {
         Pageable pageable = PageRequest.of(0, 10, new Sort(Sort.Direction.DESC, "id"));
         Channel actualChannel = channelRepository.findById(id).get();
         Page<Message> messages = messageRepository.findByChannel(actualChannel, pageable);
         return messages;
     }
-
 
     protected Message mapMessageData(MessageJSON messageJSON, Channel channel) {
         Message message = new Message();
@@ -52,5 +50,11 @@ public class MessageService {
         message.setCreator(messageJSON.getCreator());
         message.setChannel(channel);
         return message;
+    }
+
+    public void addMessage(int channelId, Message message) {
+        Channel actualChannel = channelRepository.findById(channelId).get();
+        actualChannel.getMessageList().add(message);
+        channelRepository.save(actualChannel);
     }
 }

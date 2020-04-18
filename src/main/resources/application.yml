@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: "dev"
+  main:
+    banner-mode: "off"
+---
+spring:
+  profiles: dev
+  jpa:
+    hibernate:
+      ddl-auto:
+        create-drop
+  datasource:
+    url: "jdbc:mysql://localhost:3306/chatdb?serverTimezone=UTC"
+    username: "root"
+    password: "password"
+server:
+  port: 8080
+
+---
+
+spring:
+  profiles: prod
+  jpa:
+    hibernate:
+      ddl-auto:
+        create-drop
+  datasource:
+    url: "${SPRING_DATASOURCE_URL}"
+    username: "${MYSQL_USERNAME}"
+    password: "${MYSQL_PASSWORD}"
+
+server:
+  port: 8080

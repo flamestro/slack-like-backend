@@ -28,6 +28,6 @@ public class MessageController {
 
     @GetMapping(value = "/{id}/messages")
     PagedResources<Message> get(PagedResourcesAssembler assembler, @PathVariable("id") int id) {
-        return assembler.toResource(messageService.getMessages(assembler, id));
+        return assembler.toResource(messageService.getMessages(id));
     }
 }
