@@ -37,7 +37,7 @@ public class ChannelService {
         }
     }
 
-    protected Channel mapChannelData(ChannelDTO channelDTO) {
+    private Channel mapChannelData(ChannelDTO channelDTO) {
         Channel channel = new Channel();
         channel.setTopic(channelDTO.getTopic());
         channel.setName(channelDTO.getName());
