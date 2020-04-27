@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.Http403ForbiddenEntryPoin
 @Order(1)
 public class AuthTokenSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("X-Group-Token")
+    @Value("X-Token")
     private String authHeaderName;
 
     //TODO: retrieve this token value from data source

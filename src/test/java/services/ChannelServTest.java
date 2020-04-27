@@ -27,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("tests")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
