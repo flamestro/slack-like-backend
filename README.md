@@ -1,7 +1,7 @@
-# SlackLikeBackendSpring
+# Slack Like Messaging App
 
-A project I made for University.
-It's a SlackLike Backend written in Spring Boot 2.
+This is a very simple slack like messsaging app that uses REST and not Websockets to submit and fetch messages.
+
 
 Run with 
 `docker-compose up --build`
